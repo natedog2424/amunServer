@@ -1,7 +1,7 @@
 from flask import Flask, render_template
 
 app = Flask(__name__)
-light = false;
+light = False;
 
 @app.route('/')
 def hello_world():
@@ -11,10 +11,10 @@ def hello_world():
 def test():
     if light:
         ser.write(b"A")
-        light = false;
+        light = False;
     else:
         ser.write(b"z")
-        light = true;
+        light = True;
     print("test")
     return render_template("home.html")
 
