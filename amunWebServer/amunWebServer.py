@@ -1,3 +1,7 @@
+from flask import Flask
 
-print("testing testing 123")
-print("git sucks")
+app = Flask(__name__)
+
+@app.route('/')
+def hello_world():
+    return 'Hello, World!'
