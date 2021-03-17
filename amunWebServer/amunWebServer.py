@@ -3,13 +3,13 @@ import serial
 
 app = Flask(__name__)
 light = False;
-
 @app.route('/')
 def hello_world():
     return render_template("home.html")
 
 @app.route('/test', methods = ['POST'])
 def test():
+    global light
     if light:
         ser.write(b"A")
         light = False;
