@@ -1,6 +1,7 @@
 from flask import Flask, render_template
 
 app = Flask(__name__)
+light = false;
 
 @app.route('/')
 def hello_world():
@@ -8,8 +9,16 @@ def hello_world():
 
 @app.route('/test', methods = ['POST'])
 def test():
+    if light:
+        ser.write(b"A")
+        light = false;
+    else:
+        ser.write(b"z")
+        light = true;
     print("test")
     return render_template("home.html")
 
 if __name__ == '__main__':
+    ser = serial.Serial('/dev/ttyACM0', 9600, timeout=1)
+    ser.flush()
     app.run(debug=True, host='0.0.0.0', port=80)
