@@ -1,4 +1,5 @@
 from flask import Flask, render_template
+import serial
 
 app = Flask(__name__)
 light = False;
