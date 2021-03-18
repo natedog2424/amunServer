@@ -4,8 +4,7 @@
         xhttp = new XMLHttpRequest();
         xhttp.open("POST", "test", true)
         xhttp.setRequestHeader("Content-Type", "text/plain");
-        alert(document.getElementById("colorPicker").value)
-        xhttp.send(document.getElementById("colorPicker").value);
+        xhttp.send(document.getElementById("colorPicker").value.toString());
     }
 </script>
 <html lang="en">
