@@ -3,7 +3,7 @@
     function update() {
         xhttp = new XMLHttpRequest();
         xhttp.open("POST", "test", true)
-        xhttp.setRequestHeader("Content-Type", "text/plain");
+        xhttp.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
         xhttp.send(document.getElementById("colorPicker").value.toString());
     }
 </script>
