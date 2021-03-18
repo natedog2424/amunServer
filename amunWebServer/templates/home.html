@@ -1,9 +1,10 @@
 ﻿<!DOCTYPE html>
 <script type="text/javascript">
-    function test() {
+    function update() {
         xhttp = new XMLHttpRequest();
         xhttp.open("POST", "test", true)
-        xhttp.send();
+        xhttp.setRequestHeader("Content-Type", "text/plain");
+        xhttp.send(document.getElementById("colorPicker").value);
     }
 </script>
 <html lang="en">
@@ -12,6 +13,6 @@
     <title></title>
 </head>
 <body>
-    <button onclick="test()">light switch</button>
+    <input onchange="update()" type="color" id="colorPicker">
 </body>
 </html>

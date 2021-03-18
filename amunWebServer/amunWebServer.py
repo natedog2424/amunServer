@@ -9,14 +9,7 @@ def hello_world():
 
 @app.route('/test', methods = ['POST'])
 def test():
-    global light
-    if light:
-        ser.write(b"A")
-        light = False;
-    else:
-        ser.write(b"z")
-        light = True;
-    print("test")
+    print(request.form)
     return render_template("home.html")
 
 if __name__ == '__main__':
