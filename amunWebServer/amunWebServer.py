@@ -9,7 +9,7 @@ def hello_world():
 
 @app.route('/test', methods = ['POST'])
 def test():
-    print(request.form)
+    print(request.form.items())
     return render_template("home.html")
 
 if __name__ == '__main__':
