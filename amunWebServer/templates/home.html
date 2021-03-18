@@ -4,8 +4,26 @@
         xhttp = new XMLHttpRequest();
         xhttp.open("POST", "test", true)
         xhttp.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
-        xhttp.send(document.getElementById("colorPicker").value.toString());
+        xhttp.send("color=" + document.getElementById("colorPicker").value);
     }
+
+    function rgbToHex(red, green, blue) {
+        const rgb = (red << 16) | (green << 8) | (blue << 0);
+        return '#' + (0x1000000 + rgb).toString(16).slice(1);
+    }
+
+    function rgbUpdate() {
+        red = document.getElementById("redSlider").value;
+        green = document.getElementById("greenSlider").value;
+        blue = document.getElementById("blueSlider").value;
+        document.getElementById("colorPicker").value = rgbToHex(red, green, blue);
+
+        update();
+    }
+
+    
+
+    
 </script>
 <html lang="en">
 <head>
@@ -14,5 +32,8 @@
 </head>
 <body>
     <input onchange="update()" type="color" id="colorPicker">
+    <input type="range" id="redSlider" min="0" max="255" value="0" onchange="rgbUpdate()">
+    <input type="range" id="greenSlider" min="0" max="255" value="0" onchange="rgbUpdate()">
+    <input type="range" id="blueSlider" min="0" max="255" value="0" onchange="rgbUpdate()">
 </body>
 </html>
