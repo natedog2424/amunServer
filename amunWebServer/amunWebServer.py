@@ -1,11 +1,17 @@
 from flask import Flask, render_template, request, jsonify
 import serial
+import datetime
+import time
+from multiprocessing import Process, Value
 
 ##skyColors = ["fe9e4b" , "cc675f" , "99788b" , "4f5474" , "000000" ]
 ##skyColors = ["ff0000" , "00ff00" , "0000ff" , "ff00ff" , "000000" ]
 skyColors = ["eeebe3" , "ffc284" , "fcd485" , "b8eff0" , "000000" ]
 
 gradientTime = 0
+alarmHour = 0
+alarmMin = 0
+alarmSet = False
 
 def linearGradient(colors, keys):
     if (len(colors) != len(keys)):
@@ -46,6 +52,20 @@ def test():
     ser.write(color.encode('utf-8'))
     return render_template("home.html")
 
+@app.route('/alarm', methods = ['POST'])
+def alarm():
+    global alarmHour
+    global alarmMin
+    global alarmSet
+
+    time = request.form['time']
+    alarmHour = time[:2]
+    alarmHour = time[-2:]
+    alarmSet = True
+    
+    print(time)
+    return render_template("home.html")
+
 @app.route('/inc', methods = ['POST'])
 def inc():
     updateSky(0.02)
@@ -55,6 +75,15 @@ def inc():
 def dec():
     updateSky(-0.02)
     return jsonify(success=True)
+
+def alarmCheck():
+    while(True):    
+        now = datetime.datetime.now()
+        if ((now.hour == alarmHour & now.minute >= alarmMin) or (now.hour > alarmHour)) and alarmSet:
+            ser.write("#ff0000")
+            alarmSet = False
+        else:
+            time.sleep(5)
 
 #300, 600, 1200, 2400, 4800, 9600, 14400, 19200, 28800, 31250, 38400, 57600, and 115200
 BAUD_RATE = 19200 
@@ -68,4 +97,7 @@ if __name__ == '__main__':
             print("error connecting to serial")
     
     ser.flush()
+    p = Process(target=alarmCheck)
+    p.start()
     app.run(debug=True, host='0.0.0.0', port=80)
+    p.join()

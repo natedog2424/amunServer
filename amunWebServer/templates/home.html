@@ -36,20 +36,54 @@
         xhttp.send();
     }
 
+    function setAlarm(){
+        xhttp = new XMLHttpRequest();
+        xhttp.open("POST", "alarm", true)
+        xhttp.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
+        xhttp.send("time=" + document.getElementById("alarm").value);
+    }
+
     
 </script>
+<style>
+    .gridbox{
+        width: 100%;
+        height: 100%;
+        display: flex;
+        flex-direction: column;
+        justify-content: space-evenly;
+        align-items: center;
+        margin: 0;
+        padding: 0;
+        position: absolute;
+    }
+
+    input[type=time]{
+        padding: 3%;
+        font-size: 3em;
+    }
+
+    input[type=color]{
+        width: 50%;
+        height: 50%;
+    }
+    button{
+        padding: 2%;
+        font-size: 3em;
+        
+    }
+</style>
+
 <html lang="en">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
 <head>
-    <h1 style="font-size:100px">Color Picker!</h1>
-    <meta charset="utf-8" />
-    <title></title>
+    <title>AMUN</title>
 </head>
 <body>
-    <input onchange="update()" type="color" id="colorPicker">
-    <input type="range" id="redSlider" min="0" max="255" value="0" onchange="rgbUpdate()">
-    <input type="range" id="greenSlider" min="0" max="255" value="0" onchange="rgbUpdate()">
-    <input type="range" id="blueSlider" min="0" max="255" value="0" onchange="rgbUpdate()">
-    <button onclick="inc()">inc</button>
-    <button onclick="dec()">dec</button>
+    <div class="gridbox">
+        <input onchange="update()" type="color" id="colorPicker">
+        <input type="time" id="alarm" value="07:00">
+        <button onclick="setAlarm()">Set Alarm</button>
+    </div>
 </body>
 </html>
