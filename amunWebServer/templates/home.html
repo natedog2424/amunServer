@@ -37,11 +37,11 @@
     }
 
     function setAlarm(){
-        alert(document.getElementById("sky").value);
         xhttp = new XMLHttpRequest();
         xhttp.open("POST", "alarm", true)
         xhttp.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
         xhttp.send("time=" + document.getElementById("alarm").value + "&sky=" + document.getElementById("sky").value + "&sound=" + document.getElementById("sound").value + "&duration=" + document.getElementById("duration").value);
+        alert("alarm set!");
     }
 
     
@@ -105,6 +105,7 @@
         <label>alarm sound</label>
         <select id="sound">
             <option value="birds.wav">birds</option>
+            <option value="lofi.mp3">Lo-Fi</option>
         </select>
         </select>
         <button onclick="setAlarm()">Set Alarm</button>

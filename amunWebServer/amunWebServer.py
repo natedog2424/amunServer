@@ -54,6 +54,8 @@ def test():
     color = request.form['color']
     
     print(color)
+    ser.reset_output_buffer()
+    ser.reset_input_buffer()
     ser.write(color.encode('utf-8'))
     return render_template("home.html")
 
@@ -91,14 +93,16 @@ def dec():
     return jsonify(success=True)
 
 def alarmRing():
-    ##playsound(alarmSound.value)
-    ##player = subprocess.Popen(["mplayer", "amunServer/amunWebServer/birds.wav", "-ss", "30"], stdin=subprocess.PIPE, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
+    player = subprocess.Popen(["mplayer", "amunServer/amunWebServer/" + alarmSound.value, "-volume", "100"], stdin=subprocess.PIPE, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
     string = "~s"
-    string += str(wakeDuration.value)
+    string += str(wakeDuration.value*60)
     string += "#"
     string += alarmSky.value
     ser.write(string.encode('utf-8'))
-    print(string)
+    ser.flush()
+    ##for vol in range(1):
+    ##    player.stdin.write("q")
+    ##    time.sleep((wakeDuration.value*60)/33)
 
 def alarmCheck(alarmHour, alarmMin, alarmSet):
     while(True):    
