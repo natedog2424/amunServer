@@ -3,15 +3,20 @@ import serial
 import datetime
 import time
 from multiprocessing import Process, Value
+from multiprocessing.sharedctypes import Value, Array
+import subprocess
 
 ##skyColors = ["fe9e4b" , "cc675f" , "99788b" , "4f5474" , "000000" ]
 ##skyColors = ["ff0000" , "00ff00" , "0000ff" , "ff00ff" , "000000" ]
 skyColors = ["eeebe3" , "ffc284" , "fcd485" , "b8eff0" , "000000" ]
 
 gradientTime = 0
-alarmHour = 0
-alarmMin = 0
-alarmSet = False
+alarmHour = Value('i', 0)
+alarmMin = Value('i', 0)
+alarmSet = Value('i', 0)
+alarmSky = Array('c', "000000000000000000000000000000000000000000000000000000000000")
+alarmSound = Array('c', "birds.wav")
+wakeDuration = Value('d',1)
 
 def linearGradient(colors, keys):
     if (len(colors) != len(keys)):
@@ -57,11 +62,20 @@ def alarm():
     global alarmHour
     global alarmMin
     global alarmSet
+    global alarmSky
+    global alarmSound
+    global wakeDuration
 
     time = request.form['time']
-    alarmHour = time[:2]
-    alarmHour = time[-2:]
-    alarmSet = True
+    alarmSky.value = request.form['sky']
+    alarmSound.value = request.form['sound']
+    wakeDuration.value = float(request.form['duration'])
+    print(alarmSky)
+    print(wakeDuration)
+
+    alarmHour.value = int(time[:2])
+    alarmMin.value = int(time[-2:])
+    alarmSet.value = int(True)
     
     print(time)
     return render_template("home.html")
@@ -76,18 +90,37 @@ def dec():
     updateSky(-0.02)
     return jsonify(success=True)
 
-def alarmCheck():
+def alarmRing():
+    ##playsound(alarmSound.value)
+    ##player = subprocess.Popen(["mplayer", "amunServer/amunWebServer/birds.wav", "-ss", "30"], stdin=subprocess.PIPE, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
+    string = "~s"
+    string += str(wakeDuration.value)
+    string += "#"
+    string += alarmSky.value
+    ser.write(string.encode('utf-8'))
+    print(string)
+
+def alarmCheck(alarmHour, alarmMin, alarmSet):
     while(True):    
         now = datetime.datetime.now()
-        if ((now.hour == alarmHour & now.minute >= alarmMin) or (now.hour > alarmHour)) and alarmSet:
-            ser.write("#ff0000")
-            alarmSet = False
-        else:
-            time.sleep(5)
+        print(now.hour)
+        print(now.minute)
+
+        print(alarmHour.value)
+        print(alarmMin.value)
+        print(alarmSet.value)
+        if (alarmSet.value):
+            if (((now.hour >= alarmHour.value) and (now.minute >= alarmMin.value)) or (now.hour > alarmHour.value)):
+                alarmSet.value = False
+                alarmRing()
+        time.sleep(5)
 
 #300, 600, 1200, 2400, 4800, 9600, 14400, 19200, 28800, 31250, 38400, 57600, and 115200
 BAUD_RATE = 19200 
 if __name__ == '__main__':
+    alarmHour = Value('i', 0)
+    alarmMin = Value('i', 0)
+    alarmSet = Value('i', 0)
     try:
         ser = serial.Serial('/dev/ttyACM0', 19200, timeout=1)
     except:
@@ -97,7 +130,7 @@ if __name__ == '__main__':
             print("error connecting to serial")
     
     ser.flush()
-    p = Process(target=alarmCheck)
+    p = Process(target=alarmCheck, args=(alarmHour, alarmMin, alarmSet))
     p.start()
-    app.run(debug=True, host='0.0.0.0', port=80)
+    app.run(debug=True, use_reloader=False, host='0.0.0.0', port=80)
     p.join()

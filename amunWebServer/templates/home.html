@@ -37,10 +37,11 @@
     }
 
     function setAlarm(){
+        alert(document.getElementById("sky").value);
         xhttp = new XMLHttpRequest();
         xhttp.open("POST", "alarm", true)
         xhttp.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
-        xhttp.send("time=" + document.getElementById("alarm").value);
+        xhttp.send("time=" + document.getElementById("alarm").value + "&sky=" + document.getElementById("sky").value + "&sound=" + document.getElementById("sound").value + "&duration=" + document.getElementById("duration").value);
     }
 
     
@@ -56,20 +57,30 @@
         margin: 0;
         padding: 0;
         position: absolute;
+        font-family: Helvetica, sans-serif;
+    }
+
+    select{
+        margin: 1%;
+        font-size: 1em;
+        font-family: Helvetica, sans-serif;
     }
 
     input[type=time]{
         padding: 3%;
-        font-size: 3em;
+        font-size: 2em;
+        font-family: Helvetica, sans-serif;
     }
 
     input[type=color]{
-        width: 50%;
-        height: 50%;
+        width: 30%;
+        height: 30%;
+        font-family: Helvetica, sans-serif;
     }
     button{
         padding: 2%;
-        font-size: 3em;
+        font-family: Helvetica, sans-serif;
+        font-size: 2em;
         
     }
 </style>
@@ -83,6 +94,19 @@
     <div class="gridbox">
         <input onchange="update()" type="color" id="colorPicker">
         <input type="time" id="alarm" value="07:00">
+        <label>sunrise duration (minutes)</label>
+        <input type="number" id="duration" value="1">
+        <label>sky type</label>
+        <select id="sky">
+            <option value="cd6b1fd59734bfddc57dd0d440a6b5b0ceb670bdc03995a33167961d4567">Sunny Beach</option>
+            <option value="ffaf59fe9e6cfa7b86c33e77a836b6db8153d34a57c53975962c9a38147a">Vibrant Skies</option>
+            <option value="e8f6f76ccce4048dc4043a7a00000058adc30481b40a41830c3362000000">Arctic Rise</option>
+        </select>
+        <label>alarm sound</label>
+        <select id="sound">
+            <option value="birds.wav">birds</option>
+        </select>
+        </select>
         <button onclick="setAlarm()">Set Alarm</button>
     </div>
 </body>
