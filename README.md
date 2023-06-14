@@ -1,7 +1,7 @@
 # AMUN Light Server
 
 The AMUN Light was designed and created for my high school senior engineering capstone project.
-> My Python skills have improved immensely since I have programmed a complex server for my startup [RECRUITid](https://www.recruitid.net) however, I have to keep that code private for security reasons. I hope to create an open source python project soon.
+> My Python skills have improved immensely since this project as I have been building and improving a complex Python webserver since 2021 for my startup [RECRUITid](https://www.recruitid.net) however, I have to keep that code private for security reasons. I hope to create an open source python project soon.
 
 The device was a smart light solution that uses full spectrum light and fresnel optics to emulate sunlight coming from a windown or skylight in order to aid with gradually waking the user to overcome sleep inertia as well as to reduce the effects of SAD (Seasonal Affective Disorder)
 
